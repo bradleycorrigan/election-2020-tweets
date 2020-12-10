@@ -1,0 +1,40 @@
+---
+title: "Exploratory Data Analysis - US Election Tweets"
+author: "Bradley Corrigan"
+date: "10/12/2020"
+output: html_document
+---
+Load libraries
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+```
+Read data files
+```{r}
+trump_tweets <- read_csv("../Data/hashtag_donaldtrump.csv")
+biden_tweets <- read_csv("../Data/hashtag_joebiden.csv")
+```
+Inspect data files
+```{r}
+head(trump_tweets)
+head(biden_tweets)
+```
+Finding out where Tweets about Biden came from 
+```{r}
+biden_tweet_location <- biden_tweets %>% 
+  group_by(state) %>% 
+  summarise(count = n()) %>% 
+  arrange(desc (count))
+
+biden_tweet_location
+```
+An attempt to visualise where there were the most tweets about Biden
+```{r}
+biden_location_graph <- biden_tweet_location %>%
+  filter(count <= 10000) %>% 
+  ggplot(aes(x=state,y=count)) + 
+           geom_col()
+
+biden_location_graph
+```
+Condlusion, it is not useful to visualise this. A table is sufficient. 
